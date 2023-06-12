@@ -1,5 +1,4 @@
 import Constants._
-import SimpleUser.trials
 
 import scala.util.Random
 
@@ -14,7 +13,7 @@ object ComputerUser extends User {
       var x = Random.nextInt(10)
       var y = Random.nextInt(10)
 
-    if (enemy_board.alreadyMissed(x, y) || enemy_board.alreadyBombarded(x, y)) println("Komputer trafil w pole wczesniej trafione!")
+    if (enemy_board.alreadyChecked(x, y)) println("Komputer trafil w pole wczesniej trafione!")
     else if (enemy_board.tryAttack(x, y)) { //od razu usuwanie wektora z enemy_board jesli sie powiedzie atak
       println(s"Komputer trafil na polu ($x, $y)!")
       points += ACQUIRED_POINTS
