@@ -1,4 +1,5 @@
-import main.battleship.ShipType
+package main.battleship
+
 
 class Ship(val shipType: ShipType.Value, val length: Int, val width: Int) {
   val size: Int = length * width

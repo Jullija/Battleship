@@ -1,4 +1,4 @@
-
+import main.battleship
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -11,3 +11,10 @@ object Main {
 // ship
 // user
 //
+
+
+//ShipFactory : createShip
+//tryAttack - też
+//
+//
+//a julia:testy

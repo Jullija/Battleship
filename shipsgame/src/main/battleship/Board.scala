@@ -1,8 +1,7 @@
+package main.battleship
 
 import scala.collection.mutable
-import scala.math
 import scala.math.abs
-import main.battleship.ShipType
 import main.battleship.ShipType.ShipType
 
 class Board {
@@ -51,12 +50,15 @@ class Board {
     checked.contains(x, y)
   }
 
-  def tryAttack(x: Int, y: Int): Boolean ={
-    occupied.contains((x, y));
+  def tryAttack(x: Int, y: Int): Boolean = {
+    if (occupied.contains((x, y))) {
+      occupied.remove((x, y))
+      checked.add((x, y)) //wykorzystane pole wiec dodajemy do checked
+      true
+    } else {
+      false
+    }
   }
-
-
-
 
 
 }

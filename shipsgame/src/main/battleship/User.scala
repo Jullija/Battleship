@@ -1,3 +1,4 @@
+package main.battleship
 trait User {
   var board: Board
   var enemy_board: Board
