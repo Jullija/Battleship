@@ -17,9 +17,9 @@ class Board {
   def addShip(xs: Int, ys: Int, xe: Int, ye: Int, shipType: ShipType): Unit ={
     var length = abs(ys - ye);
     var width = abs(xs - xe);
+    ships.addOne(new Ship(shipType, length, width));
     for (i <- math.min(xs, xe) to math.max(xs, xe)){
       for (j <- math.min(ys, ye) to math.max(ys, ye)){
-          ships.addOne(new Ship(shipType, length, width));
           occupied.add((i, j));
       }
     }
@@ -38,16 +38,13 @@ class Board {
     }
   }
 
+
   def removeShip(ship: Ship): Unit ={ //dodałabym od razu usuwanie z setu statków oraz usuwanie z occupied, wystarczy w
     //ship trzymac dodatkowo jego koordynaty i wtedy można to zrobić za jednym razem
     ships.remove(ship);
   }
 
-  def createShip(shipType: ShipType): Unit ={ //nie wiem, czy to konieczne, bo w addShip przekazujemy wszystkie potrzebne wartości
-    val length = shipType.Value;
-    val width = shipType.Value;
 
-  }
 
   def alreadyChecked(x: Int, y: Int): Boolean = {
     checked.contains(x, y)
