@@ -2,57 +2,47 @@ package main.battleship
 
 import scala.collection.mutable
 class ShipFactory {
-  val usedShips: mutable.HashSet[ShipType.Value] = mutable.HashSet.empty
+  val usedShips: mutable.HashSet[ShipType.ShipType] = mutable.HashSet.empty
 
-  def checkIfUsed(shipType: ShipType.Value): Boolean = {
-    usedShips.contains(shipType)
-  }
+  def checkIfUsed(shipType: ShipType.ShipType): Boolean = usedShips.contains(shipType)
 
-  def addToUsed(shipType: ShipType.Value): Unit = {
-    usedShips += shipType
-  }
-  def removeFromUsed(shipType: ShipType.Value):Unit = {
-    usedShips.remove(shipType);
-  }
+  def addToUsed(shipType: ShipType.ShipType): Unit = usedShips += shipType
 
-  //funkcja sprawdzajaca, czy podany string jest poprawnym typem statku (pokrywa sie z enumem)
-  def isValidShipType(shipType: String): Boolean = {
-    ShipType.values.exists(_.toString == shipType)
-  }
+  def removeFromUsed(shipType: ShipType.ShipType): Unit = usedShips.remove(shipType)
 
   def createShip(shipType: String): Option[Ship] = {
-    if(!isValidShipType(shipType)){
-      println("Ten typ statku nie istnieje.")
-      None
-    }
-    val shipTypeEnum = ShipType.withName(shipType)
-    if(checkIfUsed(shipTypeEnum)) {
-      println("Ten typ statku został już użyty.")
-      None
-    } else {
-      addToUsed(shipTypeEnum)
-      val ship = shipTypeEnum match {
-        case ShipType.Type1 => new Ship(shipTypeEnum, 5, 1)
-        case ShipType.Type2 => new Ship(shipTypeEnum, 4, 2)
-        case ShipType.Type3 => new Ship(shipTypeEnum, 3, 1)
-        case ShipType.Type4 => new Ship(shipTypeEnum, 2, 1)
-        // Dodaj tutaj więcej typów statków, jeśli są potrzebne
+    try {
+      val shipTypeEnum = ShipType.withName(shipType)
+      if (checkIfUsed(shipTypeEnum)) {
+        println("Ten typ statku został już użyty.")
+        None
+      } else {
+        addToUsed(shipTypeEnum)
+        ShipType.attributesOf(shipTypeEnum) match {
+          case Some(attr) =>
+            val ship = new Ship(shipTypeEnum, attr.length, attr.width)
+            Some(ship)
+          case None =>
+            println("Nie znaleziono atrybutów dla podanego typu statku.")
+            None
+        }
       }
-      Some(ship)
+    } catch {
+      case _: NoSuchElementException =>
+        println("Nie ma takiego typu statku.")
+        None
     }
   }
-
 
   def printShips(): Unit = {
     println("Dostępne typy statków:")
     ShipType.values.foreach { shipType =>
-      if(!usedShips.contains(shipType)) {
-        shipType match {
-          case ShipType.Type1 => println(s"Typ: $shipType, Długość: 1, Szerokość: 5")
-          case ShipType.Type2 => println(s"Typ: $shipType, Długość: 2, Szerokość: 4")
-          case ShipType.Type3 => println(s"Typ: $shipType, Długość: 1, Szerokość: 3")
-          case ShipType.Type4 => println(s"Typ: $shipType, Długość: 1, Szerokość: 2")
-          // Dodaj tutaj więcej typów statków, jeśli są potrzebne
+      if (!usedShips.contains(shipType)) {
+        ShipType.attributesOf(shipType) match {
+          case Some(attr) =>
+            println(s"Typ: $shipType, Długość: ${attr.length}, Szerokość: ${attr.width}")
+          case None =>
+            println(s"Typ: $shipType, brak dostępnych atrybutów.")
         }
       }
     }
