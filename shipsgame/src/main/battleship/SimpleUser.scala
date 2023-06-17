@@ -1,3 +1,4 @@
+package main.battleship
 import Constants._
 object SimpleUser extends User {
   var board: Board = new Board

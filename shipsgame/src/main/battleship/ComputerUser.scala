@@ -1,3 +1,4 @@
+package main.battleship
 import Constants._
 
 import scala.util.Random

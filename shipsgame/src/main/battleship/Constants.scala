@@ -1,3 +1,4 @@
+package main.battleship
 // Constants.scala
 
 object Constants {
