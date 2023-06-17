@@ -3,6 +3,7 @@ import scala.collection.mutable
 import scala.math
 import scala.math.abs
 import main.battleship.ShipType
+import main.battleship.ShipType.ShipType
 
 class Board {
   var occupied = new mutable.HashSet[(Int, Int)]();
