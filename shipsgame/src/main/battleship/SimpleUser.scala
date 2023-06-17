@@ -1,7 +1,7 @@
 import Constants._
 object SimpleUser extends User {
-  var board: Board
-  var enemy_board: Board
+  var board: Board = new Board
+  var enemy_board: Board = new Board
   var points: Int = 0
   var trials: Int = 0
 

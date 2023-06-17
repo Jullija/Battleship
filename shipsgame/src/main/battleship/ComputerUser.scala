@@ -3,8 +3,8 @@ import Constants._
 import scala.util.Random
 
 object ComputerUser extends User {
-  var board: Board
-  var enemy_board: Board
+  var board: Board = new Board
+  var enemy_board: Board = new Board
   var points: Int = 0
   var trials: Int = 0
   override def attack(x_x:Int=1,y_y:Int=1): Unit = {//pomysl: zrobic bardziej inteligentnego kompa, ktory bedzie wiedzial gdzie strzelac,
