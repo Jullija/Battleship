@@ -20,7 +20,7 @@ class Board {
     ships.addOne(new Ship(shipType, length, width));
     for (i <- math.min(xs, xe) to math.max(xs, xe)){
       for (j <- math.min(ys, ye) to math.max(ys, ye)){
-          occupied.add((i, j));
+        occupied.add((i, j));
       }
     }
   }
@@ -62,3 +62,4 @@ class Board {
 
 
 }
+

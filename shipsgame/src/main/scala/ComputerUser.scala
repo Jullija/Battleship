@@ -11,8 +11,8 @@ object ComputerUser extends User {
   override def attack(x_x:Int=1,y_y:Int=1): Unit = {//pomysl: zrobic bardziej inteligentnego kompa, ktory bedzie wiedzial gdzie strzelac,
     //np. jesli trafil to strzelaj wokol tego miejsca, jesli nie to strzelaj losowo
 
-      var x = Random.nextInt(10)
-      var y = Random.nextInt(10)
+    var x = Random.nextInt(10)
+    var y = Random.nextInt(10)
 
     if (enemy_board.alreadyChecked(x, y)) println("Komputer trafil w pole wczesniej trafione!")
     else if (enemy_board.tryAttack(x, y)) { //od razu usuwanie wektora z enemy_board jesli sie powiedzie atak

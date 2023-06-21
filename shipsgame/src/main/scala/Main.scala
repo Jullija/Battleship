@@ -1,4 +1,3 @@
-import main.battleship
 import main.battleship.ShipFactory
 
 object Main {
