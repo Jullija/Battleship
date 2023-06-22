@@ -15,15 +15,21 @@ class Board{
     occupied.isEmpty;
   }
 
-  def addShip(xs: Int, ys: Int, xe: Int, ye: Int, shipType: ShipType): Unit ={
-    var length = abs(ys - ye);
-    var width = abs(xs - xe);
-    ships.addOne(new Ship(shipType, length, width));
+  def addShip(xs: Int, ys: Int, xe: Int, ye: Int, ship: Option[Ship]): Boolean ={
+//    var length = abs(ys - ye);  to jest w shipFactory
+//    var width = abs(xs - xe); to jest w shipFactory
+    //jesli ship jest none to nie dodajemy statku, tylko wypisujemy komunikat ze statek nie zostal dodany
+    if (ship == None){
+      println("Statek nie zostal dodany")
+      return false
+    }
+    ships.addOne(ship.get);
     for (i <- math.min(xs, xe) to math.max(xs, xe)){
       for (j <- math.min(ys, ye) to math.max(ys, ye)){
         occupied.add((i, j));
       }
     }
+    true
   }
 
   def printBoard(): Unit ={
