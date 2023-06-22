@@ -1,12 +1,13 @@
 package main.battleship
 
+import main.battleship.Constants.SIZE
+
 import scala.collection.mutable
 import scala.math.abs
 import main.battleship.ShipType.ShipType
 
-class Board {
+class Board{
   var occupied = new mutable.HashSet[(Int, Int)]();
-  var size = 0;
   var ships = new mutable.HashSet[Ship]();
   var checked = new mutable.HashSet[(Int, Int)]();
 
@@ -26,8 +27,8 @@ class Board {
   }
 
   def printBoard(): Unit ={
-    for (i <- 0 until size){
-      for (j <- 0 until size){
+    for (i <- 0 until SIZE){
+      for (j <- 0 until SIZE){
         if (occupied.contains((i, j))){
           print("x")
         }
