@@ -31,13 +31,13 @@ object Main {
 
 //board
 //vector
-// ship
-// user
-//
+//ship
+//user
 
 
-//ShipFactory : createShip
-//tryAttack - też
+//wybierz typ1
 //
 //
-//a julia:testy
+//
+
+//
