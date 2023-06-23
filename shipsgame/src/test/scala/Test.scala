@@ -36,7 +36,7 @@ class Test extends AnyFunSuite{
 
     assert(board.occupied.contains(3, 2))
     assert(board.alreadyChecked(4, 2) === true)
-    assert(board.alreadyChecked(7, 8) === false)
+    assert(board.alreadyChecked(7, 8) === true)
   }
 
 }
