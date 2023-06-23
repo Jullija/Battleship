@@ -7,7 +7,7 @@ class ShipFactory {
   def checkIfUsed(shipType: ShipType.ShipType): Boolean = usedShips.contains(shipType)
 
   def addToUsed(shipType: ShipType.ShipType): Unit = usedShips += shipType
-
+  def everyTypeUsed(): Boolean = usedShips.size == ShipType.values.size
   def removeFromUsed(shipType: ShipType.ShipType): Unit = usedShips.remove(shipType)
 
   def createShip(shipType: String): Option[Ship] = {
