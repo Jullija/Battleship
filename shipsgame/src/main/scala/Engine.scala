@@ -51,11 +51,10 @@ object Engine {
   //ta wlasciwa gra
   def properGame(): Unit = {
     while (true) {
+      stats()
       println("\n\n--------Plansza usera---------\n\n")
       user.board.printBoard()
       println("\n\n--------Plansza wroga---------\n\n")
-      println(s"Statystyki usera: \nIlosc punktow: ${user.points}\nIlosc prob: ${user.trials}")
-      println(s"Statystyki wroga: \nIlosc punktow: ${computer.points}\nIlosc prob: ${computer.trials}")
       computer.board.printBoard(false)
       println("Podaj koordynaty ataku (x, y):")
 
@@ -64,15 +63,21 @@ object Engine {
       user.attack(coordinates(0), coordinates(1))
       if (computer.isDefeated()) {
         println("Gratuluje wygrales!")
+        stats()
         System.exit(1)
       }
 
       computer.attack(-1, -1)
       if (user.isDefeated()) {
         println("Gratuluje przegrałeś!")
+        stats()
         System.exit(1)
       }
     }
+  }
+  def stats():Unit = {
+    println(s"Statystyki usera: \nIlosc punktow: ${user.points}\nIlosc prob: ${user.trials}")
+    println(s"Statystyki wroga: \nIlosc punktow: ${computer.points}\nIlosc prob: ${computer.trials}")
   }
 
   def getCoordinates(): Array[Int] = {

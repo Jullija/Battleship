@@ -1,5 +1,6 @@
 package main.battleship
 import Constants._
+import main.battleship.ComputerUser.points
 object SimpleUser extends User {
   var board: Board = new Board
   var enemy_board: Board = new Board
@@ -13,7 +14,7 @@ object SimpleUser extends User {
       points += ACQUIRED_POINTS
     } else {
       println(s"Chybiłeś na polu ($x, $y).")
-      points -= LOST_POINTS
+      points = Math.max(points - LOST_POINTS,0)
     }
     trials+=1
   }
