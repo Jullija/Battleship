@@ -2,10 +2,13 @@ package main.battleship
 
 import main.battleship.Constants.SIZE
 
+import java.awt.Color
 import scala.io.StdIn.readLine
+import scala.swing._
+import scala.swing.event._
 import scala.util.Random
 
-object Engine {
+object Engine extends App{
   //dodaj tworzymy statki na mape
   val user: User = SimpleUser
   val computer: User = ComputerUser
@@ -37,7 +40,6 @@ object Engine {
   }
 
   def makeShipsComp() = {
-    // Rozmieszczenie statków komputera
         ShipType.values.foreach { shipType =>
           var ship: Option[Ship] = None
           ship = shipFactComp.createShip(shipType.toString)
@@ -120,10 +122,117 @@ object Engine {
 
 
   def run():Unit = {
-    connectUsers()
-    makeShips()
-    makeShipsComp()
-    properGame()
+    //connectUsers()
+//    makeShips()
+//    makeShipsComp()
+//    properGame()
+    createGame()
   }
+
+  def buttonCreator(): Button = {
+    var button = new Button()
+    button.foreground = Color.decode("#FDE3A8")
+    button.listenTo(button.mouse.clicks)
+    button.preferredSize = new Dimension(50, 50)
+    button.minimumSize = new Dimension(50, 50)
+    button.maximumSize = new Dimension(50, 50)
+    button
+  }
+
+
+
+  def createGame(): Unit = {
+    val user: User = SimpleUser
+    val computer: User = ComputerUser
+    val userArr: Array[Array[Panel]] = Array.ofDim[Panel](10, 10)
+    val compArr: Array[Array[Button]] = Array.ofDim[Button](10, 10)
+
+
+
+    def createBoardComp(): BoxPanel = {
+      val window = new BoxPanel(Orientation.Vertical){
+        border = Swing.EmptyBorder(50)
+      }
+        for (row <- 0 until SIZE) {
+          val rowPanel = new BoxPanel(Orientation.Horizontal){
+          }
+            for (col <- 0 until SIZE){
+              val button = buttonCreator()
+              button.reactions += {
+                case mc: MouseClicked => handleClick(row, col)
+              }
+              rowPanel.contents += button
+              compArr(row)(col) = button
+            }
+          window.contents += rowPanel
+        }
+      window
+    }
+
+    def createBoardUser(): BoxPanel = {
+      val window = new BoxPanel(Orientation.Vertical) {
+        border = Swing.EmptyBorder(50)
+      }
+      for (row <- 0 until SIZE) {
+        val rowPanel = new BoxPanel(Orientation.Horizontal)
+        for (col <- 0 until SIZE) {
+          val rec = new Panel{
+            preferredSize = new Dimension(50, 50)
+            background = Color.decode("#307ac9")
+            border = Swing.LineBorder(Color.decode("#025ab8"))
+          }
+          rowPanel.contents += rec
+          userArr(row)(col) = rec
+        }
+        window.contents += rowPanel
+      }
+      window
+    }
+
+    def mainWindow: Frame = new MainFrame{
+      title = "Battleship"
+      contents = createMainView()
+      visible = true
+      pack()
+      centerOnScreen()
+    }
+
+    def createBoxPanel(labelText: String): BoxPanel = {
+      val label = new Label(labelText)
+      val boxPanel = new BoxPanel(Orientation.Vertical)
+      boxPanel.contents += label
+      labelText match {
+        case "User" => boxPanel.contents += createBoardUser()
+        case "Computer" => boxPanel.contents += createBoardComp()
+      }
+
+      boxPanel
+    }
+
+
+    def createMainView(): BoxPanel =  {
+      val userBoard = createBoxPanel("User")
+      val compBoard = createBoxPanel("Computer")
+
+      val mainBoxPanel = new BoxPanel(Orientation.Horizontal){
+        contents += userBoard
+        contents += compBoard
+
+      }
+      mainBoxPanel
+    }
+
+    def handleClick(row: Int, col: Int): Unit = {
+      if (user.board.occupied.isEmpty) {
+        compArr(row)(col).foreground = Color.decode("#fc1303")
+        compArr(row)(col).background = Color.decode("#fc1303")
+      }
+    }
+
+
+    mainWindow
+
+}
+
 
 }

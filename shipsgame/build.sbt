@@ -7,3 +7,4 @@ lazy val root = (project in file("."))
     name := "shipsgame"
   )
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % Test
+libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0"
