@@ -1,23 +1,20 @@
 package main.battleship
 
-import ConsoleColors._
+import main.battleship.ConsoleColors._
 import main.battleship.Constants.SIZE
 
 import scala.collection.mutable
-import scala.math.abs
-import main.battleship.ShipType.ShipType
 
 class Board{
   var ships = new mutable.HashSet[Ship]();
-  var occupied = new mutable.HashSet[(Int, Int)](); //zawiera pola ktore sa zajete
-  var checked = new mutable.HashSet[(Int, Int)](); //zawiera pola ktore juz sprawdzilismy
+  var occupied = new mutable.HashSet[(Int, Int)]();
+  var checked = new mutable.HashSet[(Int, Int)]();
   var bombardedShipsFields = new mutable.HashSet[(Int, Int)]();//bedzie zawierac trafione POLA statkow
   def isEmpty(): Boolean = {
     occupied.isEmpty;
   }
 
   def addShip(xs: Int, ys: Int, xe: Int, ye: Int, ship: Option[Ship]): Boolean ={
-    //jesli ship jest none to nie dodajemy statku, tylko wypisujemy komunikat ze statek nie zostal dodany
     if (ship == None){
       println("Statek nie zostal dodany")
       return false
@@ -33,7 +30,6 @@ class Board{
 
   def placeShip(xs: Int, ys: Int, xe: Int, ye: Int, ship: Option[Ship],flag:Boolean=true): Boolean = {
     if (ship == None) return false
-    //sprawdzenie czy wspolrzedne statku nie wychodza poza plansze
     if (xs < 0 || xs >= SIZE || ys < 0 || ys >= SIZE || xe < 0 || xe >= SIZE || ye < 0 || ye >= SIZE) {
       if(flag)println("Błędne współrzędne, statek wychodzi poza planszę.")
       return false
@@ -61,28 +57,27 @@ class Board{
 
 
   def printBoard(canShow: Boolean = true): Unit = {
-    println("  " + (0 until SIZE).mkString(" ")) // Wypisuje górny nagłówek
+    println("  " + (0 until SIZE).mkString(" "))
     for (y <- 0 until SIZE) {
-      print(s"$y ") // Wypisuje indeksy z lewej strony
+      print(s"$y ")
       for (x <- 0 until SIZE) {
         if (occupied.contains((x, y)) && canShow) {//canShow -  flaga mowiaca, czy mozna pole pokazac
           print(Green + "N " + Reset)
         } else if (bombardedShipsFields.contains((x, y))) {
           print(Red + "x " + Reset)
         } else if (checked.contains((x, y))) {
-          print(Yellow + "- " + Reset) // nowy znak dla chybionych pól
+          print(Yellow + "- " + Reset)
         } else {
           print(Blue + "o " + Reset)
         }
       }
       println()
     }
-    println("  " + (0 until SIZE).mkString(" ")) // Wypisuje dolny nagłówek
+    println("  " + (0 until SIZE).mkString(" "))
   }
 
 
-  def removeShip(ship: Ship): Unit ={ //dodałabym od razu usuwanie z setu statków oraz usuwanie z occupied, wystarczy w
-    //ship trzymac dodatkowo jego koordynaty i wtedy można to zrobić za jednym razem
+  def removeShip(ship: Ship): Unit ={
     ships.remove(ship);
   }
 
@@ -97,10 +92,10 @@ class Board{
       println("To pole juz zostalo sprawdzone")
       return false
     }
-    checked.add((x, y)) //wykorzystane pole wiec dodajemy do checked
+    checked.add((x, y))
     if (occupied.contains((x, y))) {
       occupied.remove((x, y))
-      bombardedShipsFields.add((x, y)) //wykorzystane pole wiec dodajemy do checked
+      bombardedShipsFields.add((x, y))
       true
     } else {
       false
