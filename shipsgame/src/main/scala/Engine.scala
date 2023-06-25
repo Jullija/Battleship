@@ -1,6 +1,7 @@
 package main.battleship
 
 import main.battleship.Constants.SIZE
+import main.battleship.Engine.{computer, user}
 
 import java.awt.Color
 import scala.io.StdIn.readLine
@@ -8,17 +9,22 @@ import scala.swing._
 import scala.swing.event._
 import scala.util.Random
 
-object Engine { //extends App
+object Engine extends App{ //extends App
   //dodaj tworzymy statki na mape
-  val user: User = SimpleUser
-  val computer: User = ComputerUser
-  val shipFactUser: ShipFactory = new ShipFactory
-  val shipFactComp: ShipFactory = new ShipFactory
+  var user: User = SimpleUser
+  var computer: ComputerUser.type = ComputerUser
+  var shipFactUser: ShipFactory = new ShipFactory
+  var shipFactComp: ShipFactory = new ShipFactory
   def connectUsers():Unit={
+
+    this.user = SimpleUser
+    this.computer = ComputerUser
     user.enemy_board=computer.board
     computer.enemy_board=user.board
   }
   def makeShips() = {
+    this.shipFactUser = new ShipFactory
+    this.shipFactComp = new ShipFactory
     var coordinates: Array[Int] = Array(0, 0, 0, 0)
     while(!shipFactUser.everyTypeUsed()) {
       var ship: Option[Ship] = None
@@ -125,8 +131,8 @@ object Engine { //extends App
     connectUsers()
     makeShips()
     makeShipsComp()
-    properGame()
-   // createGame()
+//    properGame()
+    createGame()
   }
 
   def buttonCreator(): Button = {
@@ -143,10 +149,9 @@ object Engine { //extends App
 
   def createGame(): Unit = {
     val user: User = SimpleUser
-    val computer: User = ComputerUser
-    val userArr: Array[Array[Panel]] = Array.ofDim[Panel](10, 10)
+    val computer: ComputerUser.type = ComputerUser
     val compArr: Array[Array[Button]] = Array.ofDim[Button](10, 10)
-
+    computer.userArr = Array.ofDim[Panel](10, 10)
 
 
     def createBoardComp(): BoxPanel = {
@@ -159,10 +164,10 @@ object Engine { //extends App
             for (col <- 0 until SIZE){
               val button = buttonCreator()
               button.reactions += {
-                case mc: MouseClicked => handleClick(row, col)
+                case mc: MouseClicked => handleClick(col, row)
               }
               rowPanel.contents += button
-              compArr(row)(col) = button
+              compArr(col)(row) = button
             }
           window.contents += rowPanel
         }
@@ -178,11 +183,11 @@ object Engine { //extends App
         for (col <- 0 until SIZE) {
           val rec = new Panel{
             preferredSize = new Dimension(50, 50)
-            background = Color.decode("#307ac9")
+            background = if(user.board.occupied.contains((col,row))) Color.decode("#0CFF00") else Color.decode("#0070FF")
             border = Swing.LineBorder(Color.decode("#025ab8"))
           }
           rowPanel.contents += rec
-          userArr(row)(col) = rec
+          computer.userArr(col)(row) = rec
         }
         window.contents += rowPanel
       }
@@ -223,10 +228,29 @@ object Engine { //extends App
     }
 
     def handleClick(row: Int, col: Int): Unit = {
-      if (user.board.occupied.isEmpty) {
-        compArr(row)(col).foreground = Color.decode("#fc1303")
-        compArr(row)(col).background = Color.decode("#fc1303")
+
+      compArr(row)(col).foreground = if (computer.board.occupied.contains((row, col))) Color.decode("#fc1303") else Color.decode("#FDE3A8")
+      compArr(row)(col).background = if (computer.board.occupied.contains((row, col))) Color.decode("#fc1303") else Color.decode("#FDE3A8")
+      user.attack(row, col)
+
+      if (computer.isDefeated()) {
+        println("Gratuluje wygrales!")
+        stats()
+        Thread.sleep(1000)
+        System.exit(1)
       }
+
+      Thread.sleep(1000)
+
+      computer.attack(-1,-1)
+      if (user.isDefeated()) {
+        println("Gratuluje przegrałeś!")
+        stats()
+        Thread.sleep(1000)
+        System.exit(1)
+      }
+      stats()
+
     }
 
 
