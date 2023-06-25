@@ -8,7 +8,7 @@ import scala.swing._
 import scala.swing.event._
 import scala.util.Random
 
-object Engine extends App{
+object Engine { //extends App
   //dodaj tworzymy statki na mape
   val user: User = SimpleUser
   val computer: User = ComputerUser
@@ -122,11 +122,11 @@ object Engine extends App{
 
 
   def run():Unit = {
-    //connectUsers()
-//    makeShips()
-//    makeShipsComp()
-//    properGame()
-    createGame()
+    connectUsers()
+    makeShips()
+    makeShipsComp()
+    properGame()
+   // createGame()
   }
 
   def buttonCreator(): Button = {
