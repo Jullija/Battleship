@@ -1,12 +1,14 @@
 package main.battleship
 
 import main.battleship.Constants.SIZE
+import main.battleship.ShipType._
 
 import java.awt.Color
 import scala.io.StdIn.readLine
 import scala.swing._
 import scala.swing.event._
 import scala.util.Random
+
 
 object Engine extends App{
   //dodaj tworzymy statki na mape
@@ -139,6 +141,15 @@ object Engine extends App{
     button
   }
 
+  def recCreator(): Panel = {
+    val rec = new Panel {
+      preferredSize = new Dimension(50, 50)
+      background = Color.decode("#307ac9")
+      border = Swing.LineBorder(Color.decode("#025ab8"))
+    }
+    rec
+  }
+
 
 
   def createGame(): Unit = {
@@ -176,15 +187,33 @@ object Engine extends App{
       for (row <- 0 until SIZE) {
         val rowPanel = new BoxPanel(Orientation.Horizontal)
         for (col <- 0 until SIZE) {
-          val rec = new Panel{
-            preferredSize = new Dimension(50, 50)
-            background = Color.decode("#307ac9")
-            border = Swing.LineBorder(Color.decode("#025ab8"))
-          }
+          val rec = recCreator()
           rowPanel.contents += rec
           userArr(row)(col) = rec
         }
         window.contents += rowPanel
+      }
+      window
+    }
+
+
+
+    def createShipDesc(): BoxPanel ={
+      val window = new BoxPanel(Orientation.Horizontal) {
+        border = Swing.EmptyBorder(50)
+        for (i <- ShipType.values){
+          val attributes = attributesOf(i)
+          val length = attributes.map(_.length).getOrElse(0)
+          val width = attributes.map(_.width).getOrElse(1)
+          val desc = new BoxPanel(Orientation.Vertical){
+            contents += new Label(i.toString)
+            contents += new Label(s"Length: ${length}, width: ${width}")
+            border = Swing.EmptyBorder(10)
+          }
+
+          contents += desc
+        }
+
       }
       window
     }
@@ -204,20 +233,36 @@ object Engine extends App{
       labelText match {
         case "User" => boxPanel.contents += createBoardUser()
         case "Computer" => boxPanel.contents += createBoardComp()
+        case "Ships" => boxPanel.contents += createShipDesc()
       }
 
       boxPanel
     }
 
 
+    def createTextArea(): TextField = {
+      val textArea = new TextField()
+      textArea.preferredSize = new Dimension(200, 30)
+      textArea.minimumSize = new Dimension(200, 30)
+      textArea.maximumSize = new Dimension(200, 30)
+      textArea
+    }
+
     def createMainView(): BoxPanel =  {
       val userBoard = createBoxPanel("User")
       val compBoard = createBoxPanel("Computer")
+      val info = createShipDesc()
+      val textArea = createTextArea()
 
-      val mainBoxPanel = new BoxPanel(Orientation.Horizontal){
-        contents += userBoard
-        contents += compBoard
 
+      val mainBoxPanel = new BoxPanel(Orientation.Vertical){
+        contents += info
+        val boardPanel = new BoxPanel(Orientation.Horizontal){
+          contents += userBoard
+          contents += compBoard
+        }
+        contents += boardPanel
+        contents += textArea
       }
       mainBoxPanel
     }
@@ -228,6 +273,7 @@ object Engine extends App{
         compArr(row)(col).background = Color.decode("#fc1303")
       }
     }
+
 
 
     mainWindow
